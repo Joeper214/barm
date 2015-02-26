@@ -57,11 +57,11 @@ class Allocations(Controller):
                     if self.isWeekend(myDate) is False:
                         conv_date = myDate.strftime('%Y-%m-%d')
                         if total < 8:
-                            events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
+                            events += [{'resource_name' : load.resource_name, 'color' : load.color, 'project_name' : load.project_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
                         else:
-                            events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : 8}]
+                            events += [{'resource_name' : load.resource_name, 'color' : load.color, 'project_name' : load.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : 8}]
                             total -= divider
-                            myDate += datetime.timedelta(days=1)
+                    myDate += datetime.timedelta(days=1)
         return json.dumps(events)
 
 
@@ -90,8 +90,8 @@ class Allocations(Controller):
                 self.person.create(person_params)
                 info['resource_name'] = params['resource_name'][0]
                 info['color'] = params['color'][0]
-                Allocation.create(info)
-                return 200
+            Allocation.create(info)
+        return 200
 
     @route_with('/api/allocations/:<key>', methods=['DELETE'])
     def api_delete(self, key):
