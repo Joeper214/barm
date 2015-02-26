@@ -29,8 +29,14 @@ class Allocation(BasicModel):
         return item
 
     @classmethod
+    def find_by_alloc_key(cls, key):
+        return cls.query(cls.key == key).fetch()
+
+
+    @classmethod
     def get(cls, key):
         return cls(parent=key)
+
     @classmethod
     def find_allocation(cls, key):
         return key.get()
@@ -40,6 +46,12 @@ class Allocation(BasicModel):
         params.remaining_hours -= float(hours)
         params.temp_type = 'minus'
         params.put()
+    @classmethod
+    def retHours(self,params, hours):
+        print params[0]
+        params[0].remaining_hours += float(hours)
+        params[0].temp_type = 'return'
+        params[0].put()
 
     @classmethod
     def updateRemaining(self, data, all_hours):

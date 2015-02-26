@@ -29,7 +29,7 @@ $scope.loaded_events = {};
                 $scope.prev_end = load_string;
             })
             .error(function(data,status){
-
+                $scope.prev_end = null;
             })
     }
 
@@ -134,7 +134,6 @@ $scope.loaded_events = {};
             var start = moment($scope.prev_end)
             var old = moment($scope.record.start_date);
             var ret = old.diff(start, 'days')
-            console.log(ret);
             return ret;
         }
 

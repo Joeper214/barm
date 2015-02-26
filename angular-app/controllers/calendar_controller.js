@@ -21,6 +21,7 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
             BarmService.getCalendar()//get events from calendar service
             .success(function(data,status)  {
               $scope.resources = data;//store temporarily the data into scope-resources
+              console.log(data);
               p = data;
               var dupNames = []; // temporary storage for the list of resource names
               var dupProjects = []; // temporary storage for the list of project names

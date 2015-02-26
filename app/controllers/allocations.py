@@ -48,18 +48,20 @@ class Allocations(Controller):
         allocations = Allocation.list_all()
         events = []
         for items in allocations:
-            total = items.total_hours
-            divider = 8
-            myDate = items.alloc_date
-            while total > 0:
-                if self.isWeekend(myDate) is False:
-                    conv_date = myDate.strftime('%Y-%m-%d')
-                    if total < 8:
-                        events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : total}]
-                    else:
-                        events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : 8}]
-                    total -= 8
-                myDate += datetime.timedelta(days=1)
+            load_events = self.event.find_by_allocation(items.key)
+            for load in load_events:
+                total = load.total_hours
+                divider = load.frequency
+                myDate = load.start_date
+                while total > 0:
+                    if self.isWeekend(myDate) is False:
+                        conv_date = myDate.strftime('%Y-%m-%d')
+                        if total < 8:
+                            events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
+                        else:
+                            events += [{'resource_name' : items.resource_name, 'color' : items.color, 'project_name' : items.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : 8}]
+                            total -= divider
+                            myDate += datetime.timedelta(days=1)
         return json.dumps(events)
 
 
@@ -88,8 +90,8 @@ class Allocations(Controller):
                 self.person.create(person_params)
                 info['resource_name'] = params['resource_name'][0]
                 info['color'] = params['color'][0]
-            Allocation.create(info)
-        return 200
+                Allocation.create(info)
+                return 200
 
     @route_with('/api/allocations/:<key>', methods=['DELETE'])
     def api_delete(self, key):
@@ -102,7 +104,6 @@ class Allocations(Controller):
         Project.retHours(retData, retHour)
         items.delete()
         self.event.delete_by_alloc_id(alloc_id)
-
         return 200
-       # self.context['data'] = Allocation.create(params)
+        # self.context['data'] = Allocation.create(params)
 
