@@ -3,6 +3,7 @@ from ferris import BasicModel, ndb
 class Person(BasicModel):
     name = ndb.StringProperty()
     color = ndb.StringProperty()
+    email = ndb.StringProperty()
 
     @classmethod
     def list_all(cls):

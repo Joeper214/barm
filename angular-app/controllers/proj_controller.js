@@ -48,7 +48,7 @@ appControllers.controller('projectCtrl', function ($scope, $modalInstance, items
     }
 
     $scope.cancel = function () {
-	$modalInstance.dismiss('cancel');
+	   $modalInstance.dismiss('cancel');
     };
 
 });

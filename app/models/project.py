@@ -7,6 +7,7 @@ class Project(BasicModel):
     name = ndb.StringProperty()
     billable_hours = ndb.FloatProperty()
     start_date = ndb.DateTimeProperty()
+    drive_url = ndb.StringProperty(required=False)
     remaining_hours = ndb.FloatProperty()
 
     @classmethod
@@ -56,6 +57,7 @@ class Project(BasicModel):
         item = cls(name = params['name'],
                    billable_hours = params['billable_hours'],
                    remaining_hours = params['billable_hours'],
+                   drive_url = params['drive_url'],
                    start_date = datetime.datetime.utcfromtimestamp(float(params['start_date']))
                )
         item.put()

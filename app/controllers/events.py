@@ -35,8 +35,8 @@ class Events(Controller):
         for i in range (len(params['events'])):
             start = datetime.datetime.utcfromtimestamp(float(params['events'][i]['start_date'])) + datetime.timedelta(days=1)
             end = datetime.datetime.utcfromtimestamp(float(params['events'][i]['end_date'])) + datetime.timedelta(days=1)
-            frequency = int(params['events'][i]['frequency'])
-            total_hours = int(params['events'][i]['total'])
+            frequency = float(params['events'][i]['frequency'])
+            total_hours = float(params['events'][i]['total'])
             data ={'allocation_id' : key, 'start_date' : start, 'frequency' : frequency, 'total_hours' : total_hours, 'end_date' : end}
             Event.create(data)
 

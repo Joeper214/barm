@@ -54,13 +54,13 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
         if($scope.addPersonToggle[0] == 'list'){
             $scope.addPersonToggle = [];
             $scope.addPersonToggle.push(toggleAdd);
-            $('#resource_err').show();
+            $('#add-person-group').show();
             $('#user-icon').removeClass().addClass('fa fa-users');
             $('#person_list').hide();
         }else{
             $scope.addPersonToggle = [];
             $scope.addPersonToggle.push(toggleList);
-            $('#resource_err').hide();
+            $('#add-person-group').hide();
             $('#user-icon').removeClass().addClass('fa fa-user-plus');
             $('#person_list').show();
         }
@@ -119,6 +119,7 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     $scope.dates = [];
     $scope.colors = [];
     $scope.disp_dates = [];
+    $scope.emails = [];
     $scope.hour_counter = parseInt(0);
 
     $scope.addTodo = function () {
@@ -141,9 +142,11 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
                 $("#error_msg").show().html("Please Select a project");
                 $('#ui-select-project').focus();
             }else{
-                if(($scope.resource != null && $scope.resource != '') && $scope.addPersonToggle[0] == 'add') {
+                if(($scope.resource != null && $scope.resource != '' && $scope.email != null && $scope.email !='') && $scope.addPersonToggle[0] == 'add') {
                     $scope.resources.push($scope.resource);
+                    $scope.emails.push($scope.email);
                     $scope.resource = null;
+                    $scope.email = null;
                     pushOthers();
                     $scope.ok();
                 }else if($scope.addPersonToggle[0] == 'list'){
@@ -208,6 +211,7 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     $scope.ok = function(){
         $scope.allocation['alloc_hours'] = $scope.hours;
         $scope.allocation['resource_name'] = $scope.resources;
+        $scope.allocation['email'] = $scope.emails;
         $scope.allocation['color'] = $scope.colors;
         $('#error_msg').hide();
     	if($scope.allocation['alloc_hours'].length == 0 || $scope.allocation['resource_name'].length == 0)  {

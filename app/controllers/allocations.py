@@ -49,18 +49,22 @@ class Allocations(Controller):
         events = []
         for items in allocations:
             load_events = self.event.find_by_allocation(items.key)
+            name = items.resource_name
+            color = items.color
+            proj_name = items.project_name
             for load in load_events:
                 total = load.total_hours
-                divider = load.frequency
+                frequency = load.frequency
                 myDate = load.start_date
+                print myDate
                 while total > 0:
                     if self.isWeekend(myDate) is False:
                         conv_date = myDate.strftime('%Y-%m-%d')
-                        if total < 8:
-                            events += [{'resource_name' : load.resource_name, 'color' : load.color, 'project_name' : load.project_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
+                        if total < frequency:
+                            events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
                         else:
-                            events += [{'resource_name' : load.resource_name, 'color' : load.color, 'project_name' : load.project_name, 'alloc_date' : myDate.strftime('%Y-%m-%d'), 'alloc_hours' : 8}]
-                            total -= divider
+                            events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : frequency}]
+                            total -= frequency
                     myDate += datetime.timedelta(days=1)
         return json.dumps(events)
 
@@ -86,10 +90,12 @@ class Allocations(Controller):
                 info['resource_name'] = per.name
                 info['color'] = per.color
             else:
-                person_params = {'name' : params['resource_name'][0], 'color' : params['color'][0]}
+                person_params = {'name' : params['resource_name'][0], 'color' : params['color'][0], 'email' : params['email'][0]}
+                print person_params
                 self.person.create(person_params)
                 info['resource_name'] = params['resource_name'][0]
                 info['color'] = params['color'][0]
+                
             Allocation.create(info)
         return 200
 

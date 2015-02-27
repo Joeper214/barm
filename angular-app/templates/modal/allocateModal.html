@@ -32,7 +32,8 @@
             <div class="form-group">
                 <label>Project Name</label>
                 <select id="ui-select-project" placeholder="please select a project" ng-init="selected.project_id = option[2]" ng-change="ProjectAllocations(selected.project_id.key.urlsafe)" ng-model="selected.project_id" ng-options="item.name for item in projects track by item.key.urlsafe" class="input-sm form-control"></select>
-                <i id="placeholder-project" style="display: none; color : red"></i>
+                <i id="placeholder-project" style="display: none; color : red"></i></br>
+                <small ng-if="selected.project_id.drive_url">Drive URL:</small> <a ng-href="{{selected.project_id.drive_url}}" target="_blank"><span ng-bind-html="selected.project_id.drive_url"></span></a>
                 <!--- ui select 2 testing -->
                 <!-- <ui-select model="project" theme="bootstrap" ng-disabled="disabled">
                     <ui-select-match placeholder="Select or search a project in the list"><i ng-bind-html="$select.selected.name"></i></ui-select-match>
@@ -48,7 +49,14 @@
                 <div id="div-resource-name" class="col-md-6" style="padding-right: 0;">
                     <div class="input-group input-group-sm">
                         <select ng-change="placeholder()" id="person_list" ng-model="selected_person" ng-options="person.name for person in persons track by person.key.urlsafe" class="input-sm form-control"></select>
-                        <input  ng-change="placeholder()" id="resource_err" type="text" mandatory ng-model="resource" class="input-sm form-control" placeholder="Name" style="display:none;">
+                        <div id="add-person-group" style="display:none;"> 
+                            <div class="col-xs-12">
+                                <input  ng-change="placeholder()" id="resource_err" type="text" ng-required="true" ng-model="resource" class="input-sm form-control" placeholder="Name">
+                            </div>
+                            <div class="col-xs-12">
+                                <input  ng-change="placeholder()" id="email_err" type="text" ng-required="true" ng-model="email" class="input-sm form-control" placeholder="Email">
+                            </div>
+                        </div>
                     <span class="input-group-btn">
                         <button ng-click="showAddPerson()" id="add-person-btn" class="btn btn-default btn-sm btn-block"><i id="user-icon" class="fa fa-user-plus"></i></button>
                     </span>
