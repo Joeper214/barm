@@ -5,6 +5,7 @@ from app.models.project import Project
 from app.models.person import Person
 from app.models.event import Event
 from datetime import timedelta
+from plugins import calendar
 
 import json
 import datetime
@@ -40,8 +41,20 @@ class Allocations(Controller):
         items = self.util.decode_key(key).get()
         self.context['data'] = items
 
+
+
     def isWeekend(self, myDate):
         return True if myDate.weekday() == 5 or myDate.weekday() == 6 else False
+
+    def render_google_calendar(self,summary,start,end,attendees):
+        calendar_event = {
+            'summary' : summary,
+            'location' : 'cloudsherpas',
+            'start' : { 'dateTime' : start},
+            'end' : {'dateTime' : end},
+            'attendees' : [{ 'email' : attendees}],
+        }
+        calendar.create_event('joeper.serrano@cloudsherpas.com', calendar_event)
 
     @route_with('/api/allocations/calendar', methods=['GET'])
     def api_calendar(self):
@@ -52,6 +65,7 @@ class Allocations(Controller):
             name = items.resource_name
             color = items.color
             proj_name = items.project_name
+            email = items.email
             for load in load_events:
                 total = load.total_hours
                 frequency = load.frequency
@@ -62,11 +76,15 @@ class Allocations(Controller):
                         conv_date = myDate.strftime('%Y-%m-%d')
                         if total < frequency:
                             events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
+                            self.render_google_calendar(proj_name,conv_date,conv_date,email)                       
                         else:
                             events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : frequency}]
                             total -= frequency
+                            self.render_google_calendar(proj_name,conv_date,conv_date,email)
                     myDate += datetime.timedelta(days=1)
+
         return json.dumps(events)
+
 
 
     @route_with('/api/allocations/create', methods=['POST'])
@@ -89,12 +107,13 @@ class Allocations(Controller):
             if per is not None:
                 info['resource_name'] = per.name
                 info['color'] = per.color
+                info['email'] = per.email
             else:
                 person_params = {'name' : params['resource_name'][0], 'color' : params['color'][0], 'email' : params['email'][0]}
-                print person_params
                 self.person.create(person_params)
                 info['resource_name'] = params['resource_name'][0]
                 info['color'] = params['color'][0]
+                info['email'] = params['email'][0]
                 
             Allocation.create(info)
         return 200

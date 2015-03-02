@@ -9,6 +9,7 @@ class Allocation(BasicModel):
     project_name = ndb.StringProperty() #temporarily store project_name
     color = ndb.StringProperty() #temporarily store color
     resource_name = ndb.StringProperty()
+    email = ndb.StringProperty()
     total_hours = ndb.FloatProperty()
     remaining_hours = ndb.FloatProperty()
     temp_alloc = ndb.FloatProperty()

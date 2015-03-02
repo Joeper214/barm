@@ -106,6 +106,9 @@ $scope.loaded_events = {};
     $scope.removeEvent = function (index) {
       $scope.remaining_hrs += $scope.events[index].total;
       $scope.events.splice(index, 1);
+      if (isEmpty($scope.events)) {
+        $scope.prev_end = null
+      }
 
     };
 
@@ -114,6 +117,7 @@ $scope.loaded_events = {};
             .success(function(data,status){
                 $scope.remaining_hrs += $scope.loaded_events[index].total_hours;
                 $scope.loaded_events.splice(index,1);
+                if(isEmpty($scope.loaded_events)){$scope.prev_end = null}
             })
             .error(function(data,status){
 

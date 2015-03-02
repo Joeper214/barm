@@ -30,6 +30,9 @@ appServices.service('BarmService', function($http){
     loadEvent: function(key){
     return $http.get('/api/events/find/:'+key);
     },
+    updateEvent: function(params){
+    return $http.post('/api/events/:'+params.key.urlsafe, params);
+    },
     deleteEvent: function(key){
     return $http.delete('/api/events/:'+key.urlsafe);
     },

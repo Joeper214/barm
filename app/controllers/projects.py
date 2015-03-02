@@ -1,7 +1,11 @@
 from ferris import Controller, messages, route_with
 from ferris.components.pagination import Pagination
 from app.models.project import Project
+
+from datetime import timedelta
+
 import json
+import datetime
 
 
 class Projects(Controller):
@@ -22,6 +26,7 @@ class Projects(Controller):
         hours = int(params['billable_hours'])
         params['billable_hours'] = hours
         params['remaining_hours'] = hours
+        params['start_date'] = datetime.datetime.utcfromtimestamp(float(params['start_date']))
         self.context['data'] = Project.create(params)
 
     @route_with('/api/projects/:<key>', methods=['GET'])

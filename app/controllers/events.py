@@ -26,7 +26,14 @@ class Events(Controller):
         items = Event.find_by_allocation(id)
         self.context['data'] = items
 
-
+    @route_with('/api/events/:<key>', methods=['POST'])
+    def api_update(self,key):
+        id = self.util.decode_key(key)
+        params = json.loads(self.request.body)
+        alloc_data = Allocation.find_by_alloc_key(id)
+        Allocation.updateRemaining(alloc_data[0],params['added_hrs'])
+        return 200
+          
     @route_with('/api/events/create', methods=['POST'])
     def api_create(self):
         params = json.loads(self.request.body)

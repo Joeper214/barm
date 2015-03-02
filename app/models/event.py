@@ -28,6 +28,10 @@ class Event(BasicModel):
         item.put()
         return item
 
+    def update(self, params):
+        self.populate(**params)
+        self.put()
+    
     @classmethod
     def find_by_allocation(cls, id):
         return cls.query().filter(cls.allocation_id == id).order(cls.end_date).fetch()

@@ -1,4 +1,4 @@
-application: cs-ferris    #.appspot.com
+application: cs-barm-2015    #.appspot.com
 version: baseline
 
 runtime: python27
@@ -47,4 +47,4 @@ handlers:
 # Main script
 - url: .*
   script: main.main_app
-  login: optional
+  login: required

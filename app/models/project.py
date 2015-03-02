@@ -54,11 +54,20 @@ class Project(BasicModel):
 
     @classmethod
     def create(cls, params):
-        item = cls(name = params['name'],
-                   billable_hours = params['billable_hours'],
-                   remaining_hours = params['billable_hours'],
-                   drive_url = params['drive_url'],
-                   start_date = datetime.datetime.utcfromtimestamp(float(params['start_date']))
-               )
+        # if params['drive_url'] is not None:
+        #     item = cls(name = params['name'],
+        #                billable_hours = params['billable_hours'],
+        #                remaining_hours = params['billable_hours'],
+        #                drive_url = params['drive_url'],
+        #                start_date = datetime.datetime.utcfromtimestamp(float(params['start_date']))
+        #            )
+        # else:
+        #     item = cls(name = params['name'],
+        #                billable_hours = params['billable_hours'],
+        #                remaining_hours = params['billable_hours'],
+        #                start_date = datetime.datetime.utcfromtimestamp(float(params['start_date']))
+        #            )
+        item = cls()
+        item.populate(**params)
         item.put()
         return item

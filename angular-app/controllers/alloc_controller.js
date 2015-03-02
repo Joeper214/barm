@@ -7,6 +7,7 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     $scope.selected_person = {};
     $scope.addPersonToggle = ['list'];
     $scope.rem_hours;
+    $scope.event_params = {};
     /*$scope.selected['project_id']['default'] = "---- Please Select a Project ----";*/
     $scope.getProjects = function() {
     	BarmService.getProjects()
@@ -145,8 +146,6 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
                 if(($scope.resource != null && $scope.resource != '' && $scope.email != null && $scope.email !='') && $scope.addPersonToggle[0] == 'add') {
                     $scope.resources.push($scope.resource);
                     $scope.emails.push($scope.email);
-                    $scope.resource = null;
-                    $scope.email = null;
                     pushOthers();
                     $scope.ok();
                 }else if($scope.addPersonToggle[0] == 'list'){
@@ -230,6 +229,8 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     		    $scope.data = data.name+", "+data.total_hours;
                 $("#pool-btn").addClass("btn-disabled").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Adding...");
                 clearList();
+                    $scope.resource = null;
+                    $scope.email = null;
                     setTimeout(function()   {
                         $("#pool-btn").removeClass("btn-disabled").html("Saved!");
                     }, 1000);
@@ -249,6 +250,39 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     	}
 
     }
+
+    $scope.testRun = function(index,key){
+        total = $scope.selected.project_id.allocations[index].total_hours;
+        remaining_hours = $scope.selected.project_id.allocations[index].remaining_hours;
+        proj_remaining = $scope.selected['project_id'].remaining_hours;
+        proj_bill = $scope.selected['project_id'].billable_hours;
+
+        if(proj_remaining - total <= 0){
+            $scope.selected.project_id.allocations[index].total_hours = proj_bill;
+            add = proj_bill;
+            /*reflectHours(add,'excess',index);*/
+        }else if(total < remaining_hours){
+            $scope.selected.project_id.allocations[index].total_hours = remaining_hours;
+        }else{
+            add = total - remaining_hours; 
+            $scope.event_params['added_hrs'] = add;
+            $scope.event_params['key'] = key;
+            reflectHours(add, 'ok',index);
+        }
+        
+    }
+
+    function reflectHours(add, option, index){
+        BarmService.updateEvent($scope.event_params)
+                .success(function (data,status) {
+                    $scope.selected.project_id.allocations[index].remaining_hours += add;
+                    $scope.rem_hours -= add;        
+                })
+                .error(function  (data,status) {
+                    
+                })      
+    }
+
     $scope.hoursModal = function(key){
             $scope.key = key;
             var modalInstance = $modal.open(  {
