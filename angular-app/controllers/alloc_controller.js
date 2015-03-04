@@ -221,13 +221,13 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
     	}else if($scope.selected['project_id'].remaining_hours == 0 || $scope.selected['project_id'].remaining_hours == null)    {
             $("#error_msg").show().html($scope.selected['project_id'].name+": has no remaining hours!");
         }else  {
-
+            $("#pool-btn").addClass("btn-disabled").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Adding...");
     	    $scope.allocation['project_id'] = $scope.selected['project_id'].key;
     	    $scope.allocation['name'] = $scope.selected['project_id'].name;
     	    BarmService.addAllocation($scope.allocation)
     		.success(function(data, status)   {
     		    $scope.data = data.name+", "+data.total_hours;
-                $("#pool-btn").addClass("btn-disabled").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Adding...");
+                
                 clearList();
                     $scope.resource = null;
                     $scope.email = null;

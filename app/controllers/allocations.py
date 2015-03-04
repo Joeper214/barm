@@ -47,35 +47,71 @@ class Allocations(Controller):
         return True if myDate.weekday() == 5 or myDate.weekday() == 6 else False
 
     def render_google_calendar(self,summary,start,end,attendees):
+        print start + "T05:00:00.000+0000"
         calendar_event = {
+            "kind": "calendar#event",
             'summary' : summary,
             'location' : 'cloudsherpas',
-            'start' : { 'dateTime' : start},
-            'end' : {'dateTime' : end},
+            'start' : { 'date' : start},
+            'end' : {'date' : end},
             'attendees' : [{ 'email' : attendees}],
         }
-        calendar.create_event('joeper.serrano@sherpademo.com', calendar_event)
+        pass_event = json.dumps(calendar_event)
+        calendar.create_event('ray.tenorio@sherpademo.com', pass_event)
 
     def test_calendar(self):
 
-        event = {'attendees': [{'displayName': 'Cloud Sherpas', 'type': 'lead', 'email': u'joeper.serrano@cloudsherpas.com', 'responseStatus': 'needsAction'}, {'displayName': 'Cloud Sherpas', 'type': 'lead', 'email': u'joeper.serrano@sherpademo.com', 'responseStatus': 'needsAction'}],
-            'description': None, 'creator': {'displayName': '', 'email': u'joeper@sherpademo.com'}, 
-            'reminders': {'overrides': [{'minutes': 15, 'method': 'popup'}], 
-            'useDefault': 'false'}, 
-            'visibility': 'public', 
-            'summary': u'test nz', 
-            'start': {'date': None, 'dateTime': u'2015-03-04T04:00:00.000+0000'}, 
-            'location': None, 'transparency': 'opaque', 
-            'end': {'date': None, 'dateTime': u'2015-03-04T05:00:00.000+0000'}, 
-            'organizer': {'displayName': '', 'email': u'joeper@cloudsherpas.com'}}
-        calendar.create_event('joeper.serrano@sherpademo.com', event)
+        calendar.create_event('ray.tenorio@sherpademo.com',self.test_call())
+
+    def test_call(self):
+        owner_email = 'ray.tenorio@sherpademo.com'
+        owner_name = 'Ray Tenorio'
+        summary = 'test barm calendar'
+        visibility = 'public'
+        description = 'billing and resource mgt'
+
+
+        post = {}
+        post['location'] = ''
+        post['creator'] = {}
+        post['creator']['email'] = owner_email
+        post['creator']['displayName'] = owner_name
+        post['organizer'] = {}
+        post['organizer']['email'] = owner_email
+        post['organizer']['displayName'] = owner_name
+        post['summary'] = summary
+        post['description'] = description
+        post['attendees'] = [{
+                    'displayName': 'test',
+                    'email': 'joeper.serrano@cloudsherpas.com',
+                    'responseStatus': 'needsAction',
+                    'organizer': 'false'
+                }]
+        post['transparency'] = 'opaque'
+        post['visibility'] = 'public'
+        post['start'] = {}
+        post['end'] = {}
+
+        # allday, specific time switch
+        post['start']['date'] = '2015-03-04'
+        post['start']['dateTime'] = None
+
+        post['end']['date'] = '2015-03-04'
+        post['end']['dateTime'] = None
+
+        # reminders
+        post['reminders'] = {}
+        post['reminders']['useDefault'] = 'true'
+
+        return post
+
 
     @route_with('/api/allocations/calendar', methods=['GET'])
     def api_calendar(self):
         allocations = Allocation.list_all()
         events = []
         conv_date = None
-        #self.test_calendar()
+        #cal_events = self.test_calendar()
         for items in allocations:
             load_events = self.event.find_by_allocation(items.key)
             name = items.resource_name
@@ -97,6 +133,9 @@ class Allocations(Controller):
                             total -= frequency
                     myDate += datetime.timedelta(days=1)
         #self.render_google_calendar('Test',conv_date,conv_date,'joeper.serrano@cloudsherpas.com')
+        #self.test_calendar()
+        #calendar.get_all_events('ray.tenorio@sherpademo.com')
+        #print cal_events
         return json.dumps(events)
 
 
