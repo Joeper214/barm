@@ -45,25 +45,25 @@ settings['oauth2'] = {
 settings['oauth2_service_account'] = {
     # OAuth2 service account configuration should be generated
     # from the google cloud console (Service Account Credentials)
-    'client_email': '573875402141-86k8t1hflu3meacqm8kngdd7o2ndffat@developer.gserviceaccount.com',  # XXX@developer.gserviceaccount.com
-    'domain' : 'cloudsherpas.com',
+    'client_email': '990820776391-pg5feb011an9083uqq897ad6i38jjpnd@developer.gserviceaccount.com',  # XXX@developer.gserviceaccount.com
+    'domain' : 'sherpademo.com',
     'private_key':  """-----BEGIN PRIVATE KEY-----
-                    MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALZUYXTfoSO+1UyC
-                    FEDcizpO5ekDxhfycalaNHU76vvBqMZZD8n2S+npwEIrbnRivVw389ZuV25patll
-                    kHdb/3vyk0QAURJT3lCb/d7XeZE1EewDRHQqT+0P52DoRGpmHomFDEL2dl3Ox6yG
-                    Pqht8YwYhYZxXrkm+HjqA/IXTCdbAgMBAAECgYBxTaJ6VHX4lqBKOROI8wR6KYlp
-                    8fRp8Tl8uhebOq7d4AyXpcTQBoRKSf41oHO1U57E7ehTOqKOdGf3zMunwL3UJZpn
-                    bQ6JPgrzWmOutTGVYLJdf8o955hQ81fPkbhO6aQYXcwYWKydp098okq6KRIc8oiS
-                    DZ/ufqvLtyJQW1DoAQJBAOOfE6yGYnDLZc5pEZwiLBGbShwBeKPS96oLlPOhjTg8
-                    eK38YCBEhz8RuKQbfjt180eqvj4JBGCMUCc1pJAvpVsCQQDND71fvDcLA2uBQ4fR
-                    OIcUp8l6fevPxJOqrASeqIRvYDyNkHUKygSZj1UXDmF6DW4RTQGDpMg7g73U7ys1
-                    gyYBAkBy7kidzUD5WQovncfBgVOlFDboSynh9k0NNEnidkj7AzWgDBVxVYjApK8J
-                    VcR4O4c6QZFLe3wVT+PM2H4eO6CPAkBtm1onz9zEAEH4R/ZSuJpLShwBY0kmNvaP
-                    JX8apwyS06fKK0rER5MJ2Xkr573mlUMd8EE88lksppBTPruj0MQBAkEA0lKM7Qcu
-                    OYIYRtsmzWtQSGHivX+9k9tfAZYToyNGxgw53MOmgZCrY+yaI2wctCvEPHy19vfv
-                    z7UjZDS21H9eOQ==
+                    MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANmJWmnrkW6Mqw6m
+                    GVc9HSZ4cCmXZNugTSvJclEQzCnDSOwL6fdRjuIlvCttsIIAsK0Kqsec9AsD5j4t
+                    0OXbhFRDi9Irdce7VCDstGtk2Byn5/UixJXHgnO1n9C1c5W9tVWq2CKQcXc41OaF
+                    /sfqrAfBxsScPd+ywj+Q6hRyUALLAgMBAAECgYEAoB23TOs1GnezmI6tbEbxY9WW
+                    SSbD99wfsTEPUZfZjovM6uFCDuYbE13PCPAt0SKM6HFHjrF593mhSPcUIXvYA4mm
+                    gxH5uBvPe1xlTOwRyT6oMQM5jFhUN5i3JLCXSRoZ4mnlDnDa0H+Yt60iEperV/dk
+                    rhCfQ+qjw0ws54V8KTECQQD8BFN13LP5FVngdwW8Rzk/n1imtY8+KUZjUxg3WKnO
+                    yYZ3VvIMlg5DJnbBbxntvZT2vwk9GdILUjbS+iGU98LHAkEA3PmEi2RxFHQALw+c
+                    nFW3+6QuKlaWcTry2rqGq/U7mEtzIt1ZdDHX8tHcCCRk9vzoGyxilAt1LxN9nQsX
+                    JC873QJAcu2KHiLTFFFvVlUREYatjd0eMZB0zZVHGz6muX6+maX/o2bMJX8869Sb
+                    raT7/xZI26nNDcc7qZwJknctX2EJuwJANSmWmM6OYgRScwAHhpkczV6/eJIiWZV8
+                    DeFoOwCh2M72IUItnkXLlXClxhOzcrR/xuHTyZhEFhJTWy/q3lq6xQJAYyalbAz4
+                    ouaHlhYwgTbw/RO65pAnqqibafS0d6X4BzEFCd+6Nragx6dAV1FHC900vZip03W/
+                    3hD5MFTzu4JhWQ==
                     -----END PRIVATE KEY-----""",  # Must be in PEM format
-    'DEVELOPER_KEY' : 'AIzaSyCZwjbsE2vKtCKAmsrN4VTwNKNGk8q2PaU'
+    'DEVELOPER_KEY' : 'AIzaSyA3UKNHd6a7gys4pYri08mEFWt-0MXutZc'
 }
 
 settings['upload'] = {

@@ -54,12 +54,28 @@ class Allocations(Controller):
             'end' : {'dateTime' : end},
             'attendees' : [{ 'email' : attendees}],
         }
-        calendar.create_event('joeper.serrano@cloudsherpas.com', calendar_event)
+        calendar.create_event('joeper.serrano@sherpademo.com', calendar_event)
+
+    def test_calendar(self):
+
+        event = {'attendees': [{'displayName': 'Cloud Sherpas', 'type': 'lead', 'email': u'joeper.serrano@cloudsherpas.com', 'responseStatus': 'needsAction'}, {'displayName': 'Cloud Sherpas', 'type': 'lead', 'email': u'joeper.serrano@sherpademo.com', 'responseStatus': 'needsAction'}],
+            'description': None, 'creator': {'displayName': '', 'email': u'joeper@sherpademo.com'}, 
+            'reminders': {'overrides': [{'minutes': 15, 'method': 'popup'}], 
+            'useDefault': 'false'}, 
+            'visibility': 'public', 
+            'summary': u'test nz', 
+            'start': {'date': None, 'dateTime': u'2015-03-04T04:00:00.000+0000'}, 
+            'location': None, 'transparency': 'opaque', 
+            'end': {'date': None, 'dateTime': u'2015-03-04T05:00:00.000+0000'}, 
+            'organizer': {'displayName': '', 'email': u'joeper@cloudsherpas.com'}}
+        calendar.create_event('joeper.serrano@sherpademo.com', event)
 
     @route_with('/api/allocations/calendar', methods=['GET'])
     def api_calendar(self):
         allocations = Allocation.list_all()
         events = []
+        conv_date = None
+        #self.test_calendar()
         for items in allocations:
             load_events = self.event.find_by_allocation(items.key)
             name = items.resource_name
@@ -70,19 +86,17 @@ class Allocations(Controller):
                 total = load.total_hours
                 frequency = load.frequency
                 myDate = load.start_date
-                print myDate
+                #print myDate
                 while total > 0:
                     if self.isWeekend(myDate) is False:
                         conv_date = myDate.strftime('%Y-%m-%d')
                         if total < frequency:
-                            events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]
-                            self.render_google_calendar(proj_name,conv_date,conv_date,email)                       
+                            events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : total}]               
                         else:
                             events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : frequency}]
                             total -= frequency
-                            self.render_google_calendar(proj_name,conv_date,conv_date,email)
                     myDate += datetime.timedelta(days=1)
-
+        #self.render_google_calendar('Test',conv_date,conv_date,'joeper.serrano@cloudsherpas.com')
         return json.dumps(events)
 
 
@@ -131,4 +145,3 @@ class Allocations(Controller):
         self.event.delete_by_alloc_id(alloc_id)
         return 200
         # self.context['data'] = Allocation.create(params)
-

@@ -1,4 +1,4 @@
-application: cs-barm-2015    #.appspot.com
+application: cs-barm-app    #.appspot.com
 version: baseline
 
 runtime: python27
