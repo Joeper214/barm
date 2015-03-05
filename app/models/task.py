@@ -1,14 +1,17 @@
 from ferris import BasicModel, ndb
+from app.behaviors.taskbehavior import TaskBehavior
+
 
 class Task(BasicModel):
     taskContent = ndb.StringProperty()
-    resource_name = ndb.StringProperty()
-    project_name = ndb.StringProperty()
-    event = ndb.StringProperty()
+    calendar_id = ndb.StringProperty()
+
+    class Meta:
+        behaviors = (TaskBehavior, )
 
     @classmethod
     def list_all(cls):
-        return cls.query().order(cls.resource_name)
+        return cls.query().order(cls.calendar_id)
 
     @classmethod
     def find_by_task_id(cls, task_id):

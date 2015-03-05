@@ -131,6 +131,10 @@ class Allocations(Controller):
                         else:
                             events += [{'resource_name' : name, 'color' : color, 'project_name' : proj_name, 'alloc_date' : conv_date, 'alloc_hours' : frequency}]
                             total -= frequency
+
+                        # new_event = new Event()
+                        # new_event.resource_name = resource_name
+                        # new_event.start_date = conv_date
                     myDate += datetime.timedelta(days=1)
         #self.render_google_calendar('Test',conv_date,conv_date,'joeper.serrano@cloudsherpas.com')
         #self.test_calendar()

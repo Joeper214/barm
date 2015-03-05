@@ -20,18 +20,21 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
 
             BarmService.getCalendar()//get events from calendar service
             .success(function(data,status)  {
-              $scope.resources = data;//store temporarily the data into scope-resources
-              console.log(data);
-              p = data;
+
+              $scope.resources = data.items;//store temporarily the data into scope-resources
+              console.log(data.items);
+              p = data.items;
               var dupNames = []; // temporary storage for the list of resource names
               var dupProjects = []; // temporary storage for the list of project names
               for (i=0; i< p.length; i++)   {
-                var inputDay = p[i].alloc_date;//allocated date for the event
+                var inputDay = p[i].alloc_date.year+'-'+p[i].alloc_date.month+'-'+p[i].alloc_date.day;//allocated date for the event
         	    var projectName = p[i].project_name;//project name of the event
         	    var resourceName = p[i].resource_name;
         	    var color = p[i].color;
+                var cal_id = p[i].calendar_id;
                 var alloc_hours = p[i].alloc_hours
                 var title = ""+projectName+" ("+alloc_hours+")";
+                console.log(inputDay);
     	       if (SearchString(resourceName,dupNames)){ // check if the resources has been added in the dupNames list
 
                }else{
@@ -44,7 +47,7 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
                 dupProjects.push(projectName);
                 $scope.projects.push({name: projectName, id: i, isChecked:true});
                }
-                pushEvent(inputDay, title, color,resourceName, projectName);
+                pushEvent(inputDay, title, color,resourceName, projectName,cal_id);
             }
                 $scope.startCalendar();
                 $scope.allteams = true;
@@ -56,8 +59,8 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
             });
     };
 
-    function pushEvent(inputDay,title,color, resourceName, projectName)    {
-        $scope.events.push({title : title,start : ""+inputDay+"",color   : ""+color+"", resourceName: ""+resourceName+"", projectName: ""+projectName+"", alloc_date: ""+inputDay+""});
+    function pushEvent(inputDay,title,color, resourceName, projectName,cal_id)    {
+        $scope.events.push({title : title,start : ""+inputDay+"",color   : ""+color+"", resourceName: ""+resourceName+"", projectName: ""+projectName+"", alloc_date: ""+inputDay+"", calendar_id: cal_id});
     }
 
 
@@ -68,16 +71,17 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
             $scope.projects = [];
             BarmService.getCalendar()
             .success(function(data,status){
-                    $scope.resources = data;
-                    p = data;
+                    $scope.resources = data.items;
+                    p = data.items;
                     var dupNames = [];
                     var dupProjects = [];
                 for (i=0; i< p.length; i++){
-                    var inputDay = p[i].alloc_date;
+                    var inputDay = p[i].alloc_date.year+'-'+p[i].alloc_date.month+'-'+p[i].alloc_date.day;//allocated date for the event
                     var projectName = p[i].project_name;
                     var resourceName = p[i].resource_name;
                     var color = p[i].color;
-                    var alloc_hours = p[i].alloc_hours
+                    var alloc_hours = p[i].alloc_hours;
+                    var cal_id = p[i].calendar_id;
                     var title = ""+projectName+" ("+alloc_hours+")";
                     if (SearchString(resourceName,dupNames)){
 
@@ -91,7 +95,7 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
                     dupProjects.push(projectName);
                     $scope.projects.push({name: projectName, id: i, isChecked:true});
                    }
-                    pushEvent(inputDay, title,color ,resourceName, projectName);
+                    pushEvent(inputDay, title, color,resourceName, projectName,cal_id);//Push checked projects
                 }
                     $('#calendar').fullCalendar('addEventSource',$scope.events);
                 })
@@ -176,17 +180,18 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
             BarmService.getCalendar()
             .success(function(data,status)  {
 
-              p = data;
+              p = data.items;
               for (i=0; i< p.length; i++)   {
-                var inputDay = p[i].alloc_date;
+                var inputDay = p[i].alloc_date.year+'-'+p[i].alloc_date.month+'-'+p[i].alloc_date.day;//allocated date for the event
                 var projectName = p[i].project_name;
                 var resourceName = p[i].resource_name;
                 var color = p[i].color;
+                var cal_id = p[i].calendar_id;
                 var alloc_hours = p[i].alloc_hours
                 var title = ""+projectName+" ("+alloc_hours+")";
                   for(n=0; n<name_list.length; n++) {
                    if (name_list[n] == resourceName){
-                     pushEvent(inputDay, title,color ,resourceName, projectName);
+                     pushEvent(inputDay, title, color,resourceName, projectName,cal_id);//Push checked projects
                    }
         		  }
             }//end for checking of allocated hours
@@ -212,18 +217,19 @@ appControllers.controller('calendarCtrl', function($scope, BarmService, $modal){
             $scope.events = [];
             BarmService.getCalendar()
                 .success(function (data, status) {
-                    d = data;
+                    d = data.items;
                     var dupNames = [];
                     for(i=0; i<d.length; i++)   {
-                        var inputDay = d[i].alloc_date;
+                        var inputDay = d[i].alloc_date.year+'-'+d[i].alloc_date.month+'-'+d[i].alloc_date.day;//allocated date for the event
                         var projectName = d[i].project_name;
                         var resourceName = d[i].resource_name;
                         var color = d[i].color;
+                        var cal_id = d[i].calendar_id;
                         var alloc_hours = d[i].alloc_hours
                         var title = ""+projectName+" ("+alloc_hours+")";
                           for(n=0; n<proj_list.length; n++) {
                                 if(proj_list[n] == projectName){
-                            pushEvent(inputDay, title,color ,resourceName, projectName);//Push checked projects
+                            pushEvent(inputDay, title, color,resourceName, projectName,cal_id);//Push checked projects
                             }
                         }
                     }

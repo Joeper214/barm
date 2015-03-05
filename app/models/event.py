@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from app.behaviors.eventbehavior import EventBehavior
 from google.appengine.ext import deferred
 
+
 class Event(BasicModel):
     allocation_id = ndb.KeyProperty()
     start_date = ndb.DateProperty()

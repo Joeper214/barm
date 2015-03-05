@@ -8,8 +8,10 @@ appControllers.controller('taskCtrl', function ($scope, $modalInstance, items, B
         BarmService.getTasks()
             .success(function (data,status){
                 var p = data.items;
+                console.log($scope.items);
                 for (i=0; i<p.length; i++){
-                    if(p[i].resource_name == $scope.items.resourceName && p[i].project_name == $scope.items.projectName && p[i].event == $scope.items.alloc_date){
+                    if(p[i].calendar_id == $scope.items.calendar_id){
+
                         $scope.task['taskContent'] = p[i].taskContent;
                         $scope.task['key'] = p[i].key;
                     }
@@ -29,9 +31,8 @@ appControllers.controller('taskCtrl', function ($scope, $modalInstance, items, B
     }
 
     function addUpdateTask(){
-        $scope.task['resource_name'] = $scope.items.resourceName;
-            $scope.task['project_name'] = $scope.items.projectName;
-            $scope.task['event'] = $scope.items.alloc_date;
+                $("#ok-btn").addClass("btn-disabled").html("<span id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span> saving...");
+            $scope.task['calendar_id'] = $scope.items.calendar_id;
             if($scope.task['key'] == '' || $scope.task['key'] == null){
                 BarmService.addTask($scope.task)
                     .success(function (data,status){
@@ -53,7 +54,7 @@ appControllers.controller('taskCtrl', function ($scope, $modalInstance, items, B
     }
 
     function loadingDiag(){
-        $("#ok-btn").addClass("btn-disabled").html("<span id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span> saving...");
+
         setTimeout(function()   {
             $("#ok-btn").removeClass("btn-disabled").html("Saved!");
         }, 1000);

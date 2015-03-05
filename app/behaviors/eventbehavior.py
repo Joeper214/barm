@@ -14,48 +14,7 @@ class EventBehavior(Behavior):
     def after_delete(self, key):
         pass
     
-    @classmethod
-    def test_call(cls, params):
-        owner_email = 'ray.tenorio@sherpademo.com'
-        owner_name = 'Ray Tenorio'
-        summary = params['summary']
-        visibility = 'public'
-        description = 'No task specified.'
-
-
-        post = {}
-        post['location'] = ''
-        post['creator'] = {}
-        post['creator']['email'] = owner_email
-        post['creator']['displayName'] = owner_name
-        post['organizer'] = {}
-        post['organizer']['email'] = owner_email
-        post['organizer']['displayName'] = owner_name
-        post['summary'] = summary
-        post['description'] = description
-        post['attendees'] = [{
-                'displayName': params['name'],
-                'email': params['email'],
-                'responseStatus': 'needsAction',
-                'organizer': 'false'
-                }]
-        post['transparency'] = 'opaque'
-        post['visibility'] = 'public'
-        post['start'] = {}
-        post['end'] = {}
-
-        # allday, specific time switch
-        post['start']['date'] = params['start_date']
-        post['start']['dateTime'] = None
-
-        post['end']['date'] = params['end']
-        post['end']['dateTime'] = None
-
-        # reminders
-        post['reminders'] = {}
-        post['reminders']['useDefault'] = 'true'
-
-        calendar.create_event('ray.tenorio@sherpademo.com', post)
+  
 
     @classmethod
     def isWeekend(cls, myDate):
@@ -69,6 +28,9 @@ class EventBehavior(Behavior):
 
         params['name'] = alloc_params.resource_name
         params['email'] = alloc_params.email
+        params['project_name'] = alloc_params.project_name
+        params['color'] = alloc_params.color
+        params['event_id'] = instance.key
         myDate = instance.start_date
         while total_hours > 0:
             if self.isWeekend(myDate) is False:
@@ -77,11 +39,13 @@ class EventBehavior(Behavior):
                 params['end'] = conv_date
                 if total_hours < instance.frequency:
                     params['summary'] = alloc_params.project_name+" ("+str(total_hours)+")"
-                    self.test_call(params)
+                    params['alloc_hours'] = total_hours
+                    Allocation.test_call(params)
                 else:
                     params['summary'] = alloc_params.project_name+" ("+ str(instance.frequency)+")"
                     total_hours -= instance.frequency
-                    self.test_call(params)
+                    params['alloc_hours'] = instance.frequency
+                    Allocation.test_call(params)
 
             myDate += datetime.timedelta(days=1)
 

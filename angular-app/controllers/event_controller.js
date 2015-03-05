@@ -79,12 +79,12 @@ $scope.loaded_events = {};
     }
 
     $scope.submit = function(){
+        $("#submit-btn").addClass("btn-disabled").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Saving...");
         $scope.params['remaining_hours'] = $scope.remaining_hrs;
         $scope.params['events'] = $scope.events;
         $scope.params['allocation_id'] = $scope.items.key;
         BarmService.addEvent($scope.params)
             .success(function(data,status){
-                $("#submit-btn").addClass("btn-disabled").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Adding...");
 
                     setTimeout(function()   {
                         $("#submit-btn").removeClass("btn-disabled").html("Saved!");

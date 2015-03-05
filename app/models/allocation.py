@@ -1,8 +1,17 @@
 from ferris import BasicModel, ndb
 from datetime import datetime, timedelta
 from app.models.project import Project
+from app.models.calendar import Calendar
 from app.behaviors.allocbehavior import AllocBehavior
+from plugins import calendar
+from datetime import timedelta
+
+import json
+import datetime
+import logging
 import math
+import uuid
+
 
 class Allocation(BasicModel):
     project_id = ndb.KeyProperty()
@@ -68,3 +77,60 @@ class Allocation(BasicModel):
 
     def delete(self):
         ndb.delete_multi(ndb.Query(ancestor=self.key).iter(keys_only=True))
+
+    @classmethod
+    def test_call(cls, params):
+        owner_email = 'ray.tenorio@sherpademo.com'
+        owner_name = 'Ray Tenorio'
+        summary = params['summary']
+        visibility = 'public'
+        description = 'No task specified.'
+
+        post = {}
+        post['location'] = ''
+        post['creator'] = {}
+        post['creator']['email'] = owner_email
+        post['creator']['displayName'] = owner_name
+        post['organizer'] = {}
+        post['organizer']['email'] = owner_email
+        post['organizer']['displayName'] = owner_name
+        post['summary'] = summary
+        post['description'] = description
+        post['attendees'] = [{
+                'displayName': params['name'],
+                'email': params['email'],
+                'responseStatus': 'needsAction',
+                'organizer': 'false'
+                }]
+        post['transparency'] = 'opaque'
+        post['visibility'] = 'public'
+        post['start'] = {}
+        post['end'] = {}
+
+        # allday, specific time switch
+        post['start']['date'] = params['start_date']
+        post['start']['dateTime'] = None
+
+        post['end']['date'] = params['end']
+        post['end']['dateTime'] = None
+
+        # reminders
+        post['reminders'] = {}
+        post['reminders']['useDefault'] = 'true'
+        response = calendar.create_event('ray.tenorio@sherpademo.com', post)
+        cal_start = datetime.datetime.strptime(params['start_date'], '%Y-%m-%d')
+        cal_end = datetime.datetime.strptime(params['end'], '%Y-%m-%d')
+        cal_params = {
+            'event_id' : params['event_id'], 
+            'calendar_id' : response['id'],
+            'alloc_date' : cal_start,
+            'alloc_end' : cal_end,
+            'alloc_hours' : params['alloc_hours'],
+            'project_name' : params['project_name'],
+            'color' : params['color'],
+            'resource_name' : params['name'],
+            'email' : params['email']
+        }
+        Calendar.create(cal_params)
+        
+

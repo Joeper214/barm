@@ -113,11 +113,12 @@ def get_event_by_id(email, id):
 
 
 def create_event(email, post):
-    logging.info('calendar: create_event %s' % post)
+    logging.info('calendar: create_event')
     try:
         calendar = build_client(email)
         logging.info('calendar client created successfully!')
         response = calendar.events().insert(calendarId=email, body=post).execute()
+        #logging.info(response)
         return response
     except errors.HttpError, e:
         logging.info('create_event HTTPError!')

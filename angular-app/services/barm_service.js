@@ -43,7 +43,7 @@ appServices.service('BarmService', function($http){
         return $http.get('/api/persons/list');
     },
     getCalendar: function(){
-	return $http.get('/api/allocations/calendar');
+	return $http.get('/api/calendars/list');
     },
     getTasks: function(){
     return $http.get('/api/tasks/list');
