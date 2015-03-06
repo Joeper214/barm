@@ -1,5 +1,6 @@
 from ferris.core.ndb import Behavior
 from app.models.project import Project
+# from app.models.event import Event 
 
 class AllocBehavior(Behavior):
     def __init__(self, Model):

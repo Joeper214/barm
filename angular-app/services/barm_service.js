@@ -9,6 +9,9 @@ appServices.service('BarmService', function($http){
     getProjects: function(){
 	return $http.get('/api/projects/list', {});
     },
+    deleteProject: function(key){
+    return $http.delete('/api/projects/:'+key.urlsafe);
+    },
     updateProject: function(params){
 	return $http.post('/api/projects/:'+params.key.urlsafe, params);
     },

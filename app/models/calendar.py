@@ -37,19 +37,19 @@ class Calendar(BasicModel):
         self.put()
     
     @classmethod
-    def find_by_allocation(cls, id):
+    def find_by_event_id(cls, id):
         return cls.query().filter(cls.allocation_id == id).order(cls.end_date).fetch()
 
     def delete(self):
         ndb.delete_multi(ndb.Query(ancestor=self.key).iter(keys_only=True))
 
     @classmethod
-    def delete_by_alloc_id(cls,id):
-        allocs = cls.find_by_allocation(id)
+    def delete_by_event_id(cls,id):
+        allocs = cls.find_by_event_id(id)
         for a in allocs:
-            deferred.defer(cls.del_events, a.key.urlsafe())
+            deferred.defer(cls.del_calendar, a.key.urlsafe())
 
     @classmethod
-    def del_events(cls, key):
+    def del_calendar(cls, key):
         key = ndb.Key(urlsafe=key)
         key.delete()

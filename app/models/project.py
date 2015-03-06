@@ -71,3 +71,6 @@ class Project(BasicModel):
         item.populate(**params)
         item.put()
         return item
+        
+    def delete(self):
+        ndb.delete_multi(ndb.Query(ancestor=self.key).iter(keys_only=True))

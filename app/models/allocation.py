@@ -79,6 +79,17 @@ class Allocation(BasicModel):
         ndb.delete_multi(ndb.Query(ancestor=self.key).iter(keys_only=True))
 
     @classmethod
+    def del_by_project_id(cls, key):
+        items = cls.find_by_project(key)
+        for i in items:
+            deferred.defer(cls.del_allocation, i.key.urlsafe())
+
+    @classmethod
+    def del_allocation(cls, id):
+        key = ndb.Key(urlsafe=id)
+        key.delete()
+
+    @classmethod
     def test_call(cls, params):
         owner_email = 'ray.tenorio@sherpademo.com'
         owner_name = 'Ray Tenorio'
@@ -117,6 +128,11 @@ class Allocation(BasicModel):
         # reminders
         post['reminders'] = {}
         post['reminders']['useDefault'] = 'true'
+
+        deferred.defer(cls.push_to_calendar, post, params)
+
+    @classmethod
+    def push_to_calendar(cls, post, params):
         response = calendar.create_event('ray.tenorio@sherpademo.com', post)
         cal_start = datetime.datetime.strptime(params['start_date'], '%Y-%m-%d')
         cal_end = datetime.datetime.strptime(params['end'], '%Y-%m-%d')

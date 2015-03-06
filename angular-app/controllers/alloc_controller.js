@@ -24,6 +24,7 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
 
     $scope.ProjectAllocations = function(key){
         $("#placeholder-project").hide();
+        $("#del-proj-btn").attr('disabled', false);
         BarmService.findAllocation(key)
             .success(function(data,status){
                 $scope.selected['project_id']['allocations'] = data.items;
@@ -281,6 +282,18 @@ appControllers.controller('allocateCtrl', function ($scope, $modalInstance, item
                 .error(function  (data,status) {
                     
                 })      
+    }
+
+    $scope.deleteProject = function(){
+        key = $scope.selected['project_id'].key;
+        $("#del-proj-btn").html("<i id='loading' class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></i> Deleting...");
+        BarmService.deleteProject(key)
+            .success(function (data,status) {
+            $("#del-proj-btn").html("<i id='pool-msg' class='fa fa-level-down fa-lg'></i> Add to Pool");      
+            })
+            .error(function (data,status){
+
+            })
     }
 
     $scope.hoursModal = function(key){
